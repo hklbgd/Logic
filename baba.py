@@ -13,7 +13,7 @@
 def letter(x):
     return x == 'a' or x == 'b'
 
-# Is x formula of our sзystem? Formulas of our system are all nonempty words.
+# Is x formula of our system? Formulas of our system are all nonempty words.
 def formula(x):
     if x == '':
         return False
@@ -50,6 +50,9 @@ def proof(X):
         return False
     i = 0
     while i < len(X):
+        if formula(X[i]) == False:
+            print i, X[i]
+            return False
         if axiom(X[i]) == False:
             j = 0
             found = False
@@ -59,7 +62,7 @@ def proof(X):
                     break
                 j = j+1
             if found == False:
-                print X[i]
+                print i, X[i]
                 return False
         i = i+1
     return True
@@ -77,3 +80,23 @@ def theorem(x):
         if l == 'b':
             counter = counter + 1
     return counter%2 == 0
+
+# Return proof x if it is a theorem or return False if x is not a theorem.
+def prove(x):
+    if formula(x) == False:
+        return False
+    if theorem(x) == False:
+        return False
+    if x == 'a' or x == 'bb':
+        return [x]
+    if x[0] == 'a':
+        p = prove(x[1:])
+        p.append(x)
+        return p
+    if x[-1] == 'a':
+        p = prove(x[:-1])
+        p.append(x)
+        return p
+    p = prove(x[1:-1])
+    p.append(x)
+    return p
