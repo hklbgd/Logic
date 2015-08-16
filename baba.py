@@ -83,8 +83,6 @@ def theorem(x):
 
 # Return proof x if it is a theorem or return False if x is not a theorem.
 def prove(x):
-    if formula(x) == False:
-        return False
     if theorem(x) == False:
         return False
     if x == 'a' or x == 'bb':
