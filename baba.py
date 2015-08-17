@@ -9,6 +9,14 @@
 # without any warranty.
 
 
+# Consider we following formal theory:
+# The alphabet is {a, b}.
+# Formulas are all nonempty words over this alphabet.
+# The set of axioms is {a. bb}.
+# Derivation rules are X->ax, X->Xa, X->bXb.
+# This is implementation of functions related to this theory.
+
+
 # Is x letter of our alphabet? Our alphabet is {a, b}.
 def letter(x):
     return x == 'a' or x == 'b'
@@ -98,3 +106,39 @@ def prove(x):
     p = prove(x[1:-1])
     p.append(x)
     return p
+
+# Return proof of y from list of hypoteses X
+def prove(X, y):
+    if formula(y) == False:
+        return False
+    for z in X:
+        if formula(z) == False:
+            return False
+    if axiom(y) or y in X:
+        return [y]
+    if y[0] == 'a':
+        p = prove(X, y[1:])
+        if p != False:
+            p.append(y)
+            return p
+    if y[-1] == 'a':
+        p = prove(X, y[:-1])
+        if p != False:
+            p.append(y)
+            return p
+    if y[0] == 'b' and y[-1] == 'b' and len(y) > 2:
+        p = prove(X, y[1:-1])
+        if p != False:
+            p.append(y)
+            return p
+    return False
+
+# Is the x syntactic consequence of list of hypoteses X?
+def proves(X, y):
+    return prove(X, y) != False
+
+if formula("bbb") and proves([], "bbb") == False:
+    print "The theory is consistent."
+
+if formula("bbb") and proves([], "bbb") == False and formula("b") and proves(["bbb"], "b") == False:
+    print "The theory is incomplete."
