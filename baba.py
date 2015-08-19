@@ -59,7 +59,6 @@ def proof(X):
     i = 0
     while i < len(X):
         if formula(X[i]) == False:
-            print i, X[i]
             return False
         if axiom(X[i]) == False:
             j = 0
@@ -70,7 +69,6 @@ def proof(X):
                     break
                 j = j+1
             if found == False:
-                print i, X[i]
                 return False
         i = i+1
     return True
@@ -91,24 +89,32 @@ def theorem(x):
 
 # Return proof x if it is a theorem or return False if x is not a theorem.
 def prove(x):
-    if theorem(x) == False:
+    if formula(x) == False:
         return False
     if x == 'a' or x == 'bb':
         return [x]
-    if x[0] == 'a':
+    if len(x) > 1 and x[0] == 'a':
         p = prove(x[1:])
+        if p == False:
+            return False
         p.append(x)
         return p
-    if x[-1] == 'a':
+    if len(x) > 1 and x[-1] == 'a':
         p = prove(x[:-1])
+        if p == False:
+            return False
         p.append(x)
         return p
-    p = prove(x[1:-1])
-    p.append(x)
-    return p
+    if len(x) > 2 and x[0] == 'b' and x[-1] == 'b':
+        p = prove(x[1:-1])
+        if p == False:
+            return False
+        p.append(x)
+        return p
+    return False
 
 # Return proof of y from list of hypoteses X
-def prove(X, y):
+def proveHyp(X, y):
     if formula(y) == False:
         return False
     for z in X:
@@ -117,28 +123,28 @@ def prove(X, y):
     if axiom(y) or y in X:
         return [y]
     if y[0] == 'a':
-        p = prove(X, y[1:])
+        p = proveHyp(X, y[1:])
         if p != False:
             p.append(y)
             return p
     if y[-1] == 'a':
-        p = prove(X, y[:-1])
+        p = proveHyp(X, y[:-1])
         if p != False:
             p.append(y)
             return p
     if y[0] == 'b' and y[-1] == 'b' and len(y) > 2:
-        p = prove(X, y[1:-1])
+        p = proveHyp(X, y[1:-1])
         if p != False:
             p.append(y)
             return p
     return False
 
 # Is the x syntactic consequence of list of hypoteses X?
-def proves(X, y):
-    return prove(X, y) != False
+def consequence(X, y):
+    return proveHyp(X, y) != False
 
 if formula("bbb") and proves([], "bbb") == False:
     print "The theory is consistent."
 
-if formula("bbb") and proves([], "bbb") == False and formula("b") and proves(["bbb"], "b") == False:
+if formula("bbb") and proves([], "bbb") == False and formula("b") and consequence(["bbb"], "b") == False:
     print "The theory is incomplete."
