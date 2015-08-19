@@ -13,6 +13,7 @@ Created on Mon Aug 17 21:33:57 2015
 # notice and this notice are preserved.  This file is offered as-is,
 # without any warranty.
 
+
 def whiteSpace(x):
     return x in [' ', '\t', '\n', '\r']
 
@@ -40,7 +41,7 @@ def formulaPart(f, n):
         n += 1
     if n < 0 or n >= len(f):
         return False
-    if n+1 <= len(f) and f[n:n+1] == "~":
+    if n+1 <= len(f) and f[n:n+1] in ["~", "¬"]:
         g = formulaPart(f, n+1)
         if g == False:
             return False
@@ -54,16 +55,16 @@ def formulaPart(f, n):
             n += 1
         name = ""
         m = n
-        if n+2 <= len(f) and f[n:n+2] == "/\\":
+        if n+2 <= len(f) and f[n:n+2] in ["/\\", "∧"]:
             name = "and"
             m = n+2
-        elif n+2 <= len(f) and f[n:n+2] == "\\/":
+        elif n+2 <= len(f) and f[n:n+2] in ["\\/", "∨"]:
             name = "or"
             m = n+2
-        elif n+2 <= len(f) and f[n:n+2] == "=>":
+        elif n+2 <= len(f) and f[n:n+2] in ["->", "⇒"]:
             name = "imp"
             m = n+2
-        elif n+3 <= len(f) and f[n:n+3] == "<=>":
+        elif n+3 <= len(f) and f[n:n+3] in ["<=>", "⇔"]:
             name = "equ"
             m = n+3
         if name != "":
@@ -107,9 +108,9 @@ def formulaToString(f):
     if len(f) == 1:       
         return f[0]
     if len(f) == 2:
-        return "~"+formulaToString(f[1])
+        return "¬ "+formulaToString(f[1])
     if len(f) == 3:
-        return "("+formulaToString(f[1])+{"and":"/\\", "or":"\\/", "imp":"=>", "equ":"<=>"}[f[0]]+formulaToString(f[2])+")"
+        return "("+formulaToString(f[1])+" "+{"and":"∧", "or":"∨", "imp":"⇒", "equ":"⇔"}[f[0]]+" "+formulaToString(f[2])+")"
 
 def toUniform(f):
     if isFormula(f) == False:
