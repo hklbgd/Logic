@@ -14,7 +14,7 @@ Created on Mon Aug 17 21:33:57 2015
 # without any warranty.
 
 def whiteSpace(x):
-    return x in [' ', '\t', '\b']
+    return x in [' ', '\t', '\n', '\r']
 
 def letter(x):
     if x == "_":
