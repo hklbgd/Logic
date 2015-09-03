@@ -122,12 +122,12 @@ def proveHyp(X, y):
             return False
     if axiom(y) or y in X:
         return [y]
-    if y[0] == 'a':
+    if y[0] == 'a' and len(y) > 1:
         p = proveHyp(X, y[1:])
         if p != False:
             p.append(y)
             return p
-    if y[-1] == 'a':
+    if y[-1] == 'a' and len(y) > 1:
         p = proveHyp(X, y[:-1])
         if p != False:
             p.append(y)
@@ -148,3 +148,5 @@ if formula("bbb") and proves([], "bbb") == False:
 
 if formula("bbb") and proves([], "bbb") == False and formula("b") and consequence(["bbb"], "b") == False:
     print "The theory is incomplete."
+
+print prove("baba")
