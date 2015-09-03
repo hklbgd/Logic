@@ -64,7 +64,7 @@ def formulaPart(f, n):
         elif n+2 <= len(f) and f[n:n+2] in ["->", "⇒"]:
             name = "imp"
             m = n+2
-        elif n+3 <= len(f) and f[n:n+3] in ["<=>", "⇔"]:
+        elif n+3 <= len(f) and f[n:n+3] in ["<->", "⇔"]:
             name = "equ"
             m = n+3
         if name != "":
@@ -140,7 +140,7 @@ def toUniform(f):
             return ["and", toUniform(["or", f[1], ["not", f[2]]]), toUniform(["or", ["not", f[1]], f[2]])]
     return False
 
-f = formulaFromString("(~aba<=>~~~b)")
+f = formulaFromString("(~aba<->~~~(b/\\c))")
 print f
 print isFormula(f)
 s = formulaToString(f)
